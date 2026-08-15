@@ -1,48 +1,22 @@
 # Telegram Thumbnail Bot + Mini App Editor
 
-This version keeps the existing AniList/manual 3-image workflow and adds a Telegram Mini App editor. The visual target is the supplied Canva/PDF examples: full-bleed artwork, adaptive dark translucent left treatment, overlapping circle inset, white ring, watermark, dots and bottom-right title.
+Updated renderer for the selected Ongoing English Dub anime design.
 
-## Features
-- `/thumb <anime name>`: AniList search and selection.
-- Optional season text.
-- Auto-fetch artwork from AniList or provide 3 images manually.
-- Generates a 1280x720 PNG.
-- `✏️ Edit thumbnail` opens a Telegram Mini App.
-- Mini App controls: title/synopsis/season, circle zoom/position/size, background/poster zoom, overlay/panel opacity, title/synopsis vertical positions.
-- Export PNG, PDF, PPTX from the Mini App.
-- PPTX uses separate editable image/text/shape layers where practical; PDF is a high-quality export, not a fully native Canva document.
-- Owner/admin access and MongoDB persistence are retained.
+## Design rules
+- 1280x720 master output; renderer supports 2x rendering for high-quality PDF export.
+- Four images: main background, top horizontal image, small card 1, small card 2.
+- AniList supplies title, subtitle/romaji title, synopsis, rating, season + year, and genres.
+- The `FRIDAY` label is removed.
+- Branding is `@Ongoing_english_dub` by default.
+- Accent colour is automatically extracted from the main background image and applied to borders, pills, decorations, rating, season badge, panel accents and branding.
+- Right information card is a dark semi-transparent/frosted-style panel.
+- PNG, PDF and editable-ish PPTX exports are available from the Mini App.
 
-## Important: Telegram Mini App URL
-Set `WEBAPP_URL` to the **public HTTPS URL** of this service. On Render, if the service is `https://my-thumbnail-bot.onrender.com`, set `WEBAPP_URL=https://my-thumbnail-bot.onrender.com`.
+## Artwork flow
+`/thumb <anime>` → AniList match → choose Auto-fetch or provide 4 images manually.
 
-Telegram will not open an ordinary `http://localhost` Mini App in production. For local testing use an HTTPS tunnel such as Cloudflare Tunnel/ngrok, then set `WEBAPP_URL` to that HTTPS URL.
+Auto-fetch uses AniList banner/cover assets and sensible fallbacks. Manual mode asks for exactly four images.
 
 ## Environment
-See `.env.sample`. Required: `API_ID`, `API_HASH`, `BOT_TOKEN`, `OWNER_ID`, `MONGO_URI`. For the editor: `WEBAPP_URL`, optionally `WEBAPP_HOST=0.0.0.0`, `WEBAPP_PORT=8080`.
-
-## Run
-```bash
-pip install -r requirements.txt
-cp .env.sample .env
-python bot.py
-```
-
-## Architecture
-```
-AniList / 3 uploads
-        ↓
-   project state
-        ↓
-   Pillow renderer
-        ↓
-      PNG
-        ↓
- Telegram Mini App
-        ↓
- project state changes
-        ↓
- PNG / PDF / PPTX
-```
-
-The editor does not paint directly onto a PNG. It changes layout state and re-renders, so undo/reset and future exporters remain possible.
+Required: `API_ID`, `API_HASH`, `BOT_TOKEN`, `OWNER_ID`, `MONGO_URI`.
+Mini App: `WEBAPP_URL`, optionally `WEBAPP_HOST` and `WEBAPP_PORT`.
