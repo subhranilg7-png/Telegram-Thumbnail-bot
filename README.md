@@ -1,22 +1,31 @@
-# Telegram Thumbnail Bot + Mini App Editor
+# Telegram Anime Thumbnail Bot — Ongoing English Dub design
 
-Updated renderer for the selected Ongoing English Dub anime design.
+This version uses the selected 1280x720 anime-info design.
 
-## Design rules
-- 1280x720 master output; renderer supports 2x rendering for high-quality PDF export.
-- Four images: main background, top horizontal image, small card 1, small card 2.
-- AniList supplies title, subtitle/romaji title, synopsis, rating, season + year, and genres.
-- The `FRIDAY` label is removed.
-- Branding is `@Ongoing_english_dub` by default.
-- Accent colour is automatically extracted from the main background image and applied to borders, pills, decorations, rating, season badge, panel accents and branding.
-- Right information card is a dark semi-transparent/frosted-style panel.
-- PNG, PDF and editable-ish PPTX exports are available from the Mini App.
+## Artwork slots
+1. Main/background artwork — full canvas, also used to extract the accent colour.
+2. Top horizontal artwork.
+3. Small card artwork 1.
+4. Small card artwork 2.
 
-## Artwork flow
-`/thumb <anime>` → AniList match → choose Auto-fetch or provide 4 images manually.
+Auto mode uses AniList banner/cover artwork when additional sources are unavailable. Manual mode accepts four Telegram photo uploads.
 
-Auto-fetch uses AniList banner/cover assets and sensible fallbacks. Manual mode asks for exactly four images.
+## AniList fields
+The renderer receives title, Romaji subtitle, synopsis, average score, genres, season and season year from AniList. AniList scores are converted from `0–100` to `0–10` (e.g. `86` -> `8.6/10`). Season/year is rendered as `SPRING 2019`, etc.
 
-## Environment
-Required: `API_ID`, `API_HASH`, `BOT_TOKEN`, `OWNER_ID`, `MONGO_URI`.
-Mini App: `WEBAPP_URL`, optionally `WEBAPP_HOST` and `WEBAPP_PORT`.
+## Dynamic colour
+The accent colour is automatically extracted from image 1. It controls the borders, pills, season badge, dividers, decorative accents and branding highlights.
+
+## Fixed design rules
+- 1280x720 output.
+- No `FRIDAY` label.
+- `@Ongoing_english_dub` branding.
+- Semi-transparent dark right information panel.
+- Top horizontal rounded image.
+- Two rounded image cards.
+- Synopsis and rating on the left.
+- Season/year above the right panel.
+- No duplicate bottom-right title.
+
+## Exports
+PNG, PDF and PPTX are supported. PNG/PDF/PPTX use the same final rendered composition for visual fidelity. The Telegram Mini App remains the editable control surface for text, image crops and layout settings.
