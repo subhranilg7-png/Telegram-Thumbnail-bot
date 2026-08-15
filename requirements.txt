@@ -4,3 +4,7 @@ Pillow
 aiohttp
 python-dotenv
 motor
+fastapi
+uvicorn
+python-pptx
+reportlab
